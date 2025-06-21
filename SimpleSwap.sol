@@ -11,6 +11,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract SimpleSwap {
 
+    /// @notice owner Address of the provider of LP tokens (initialized by the contract)
+    address public owner;
+
     /// @notice Name of the liquidity token (LP token)
     string internal _name;
 
@@ -41,13 +44,22 @@ contract SimpleSwap {
     /// @notice Initializes the contract with the two token addresses
     /// @param _tokenA Address of token A
     /// @param _tokenB Address of token B
-constructor(address _tokenA, address _tokenB) {
+    constructor(address _tokenA, address _tokenB) {
     tokenA = _tokenA;
     tokenB = _tokenB;
     _name = "SimpleSwap LP Token";
     _symbol = "SSLP";
     _decimals = 18;
+    owner = msg.sender;
 }
+
+    /// @notice Emitted when INITIAL liquidity is added to the pool
+    /// @param provider Address of the liquidity provider
+    /// @param amountA Amount of token A added
+    /// @param amountB Amount of token B added
+    /// @param liquidityMinted Amount of LP tokens minted
+    event InitialLiquidityAdded(address indexed provider, uint256 amountA, uint256 amountB, uint256 liquidityMinted);
+
 
     /// @notice Emitted when liquidity is added to the pool
     /// @param provider Address of the liquidity provider
@@ -86,5 +98,59 @@ constructor(address _tokenA, address _tokenB) {
     function decimals() external view returns (uint8) {
         return _decimals;
     }
+
+    /// @notice Adds liquidity to the pool and mints LP tokens
+    /// @param tokenA address of tokenA
+    /// @param tokenB address of tokenB
+    /// @param amountADesired Amount of token A to add
+    /// @param amountBDesired Amount of token B to add
+    /// @param amountAMin Minimum accepted amount of token A
+    /// @param amountBMin Minimum accepted amount of token B
+    /// @param to Address to receive LP tokens
+    /// @param deadline Transaction expiry timestamp
+    /// @return amountA Final amount of token A added
+    /// @return amountB Final amount of token B added
+    /// @return liquidity Amount of LP tokens minted
+    function addLiquidity(address tokenA, address tokenB, uint amountADesired, uint amountBDesired, uint amountAMin, uint amountBMin, address to, uint deadline) external returns (uint amountA, uint amountB, uint liquidity) {
+        
+ if (reserveA == 0 && reserveB == 0) {
+        // Solo el owner puede hacer la primera llamada
+        require(msg.sender == owner, "Only owner can initialize");
+
+        // Silenciar warnings por parámetros no usados en este branch
+        tokenA; tokenB; amountADesired; amountBDesired; amountAMin; amountBMin; deadline;
+
+        // Montos fijos, no se usan los amountDesired
+        amountA = 1000 * 1e18;
+        amountB = 1000 * 1e18;
+        liquidity = 1000 * 1e18;
+
+        // Transferencias
+        IERC20(tokenA).transferFrom(owner, address(this), amountA);
+        IERC20(tokenB).transferFrom(owner, address(this), amountB);
+
+        // Estado
+        reserveA = amountA;
+        reserveB = amountB;
+        _totalSupply = liquidity;
+        _balanceOf[to] = liquidity;
+
+        emit InitialLiquidityAdded(owner, amountA, amountB, liquidity);
+        
+        return (amountA, amountB, liquidity);
+
+    } else {
+        // ✅ Lógica normal de addLiquidity para cualquier usuario
+        // (usando amountADesired, amountBDesired, etc.)
+    }
+        
+        //Transferir tokens del usuario al contrato. (approve antes???)
+        //Calcular y asignar liquidez según reservas.
+        //Emitir tokens de liquidez al usuario.
+        
+        
+    }
+
+
 
 }

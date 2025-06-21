@@ -49,6 +49,37 @@
 						"type": "uint256"
 					}
 				],
+				"name": "InitialLiquidityAdded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "provider",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountA",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountB",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "liquidityMinted",
+						"type": "uint256"
+					}
+				],
 				"name": "LiquidityAdded",
 				"type": "event"
 			},
@@ -121,6 +152,70 @@
 				"type": "event"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenB",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountADesired",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountBDesired",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountAMin",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountBMin",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "addLiquidity",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountA",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountB",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "liquidity",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "decimals",
 				"outputs": [
@@ -141,6 +236,19 @@
 						"internalType": "string",
 						"name": "",
 						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -216,6 +324,14 @@
 			"author": "Pablo Gianferro",
 			"details": "This contract handles tokenA and tokenB liquidity pools and manages internal LP tokens.      LP tokens are not ERC20-compatible but are tracked via internal mappings.",
 			"events": {
+				"InitialLiquidityAdded(address,uint256,uint256,uint256)": {
+					"params": {
+						"amountA": "Amount of token A added",
+						"amountB": "Amount of token B added",
+						"liquidityMinted": "Amount of LP tokens minted",
+						"provider": "Address of the liquidity provider"
+					}
+				},
 				"LiquidityAdded(address,uint256,uint256,uint256)": {
 					"params": {
 						"amountA": "Amount of token A added",
@@ -244,6 +360,23 @@
 			},
 			"kind": "dev",
 			"methods": {
+				"addLiquidity(address,address,uint256,uint256,uint256,uint256,address,uint256)": {
+					"params": {
+						"amountADesired": "Amount of token A to add",
+						"amountAMin": "Minimum accepted amount of token A",
+						"amountBDesired": "Amount of token B to add",
+						"amountBMin": "Minimum accepted amount of token B",
+						"deadline": "Transaction expiry timestamp",
+						"to": "Address to receive LP tokens",
+						"tokenA": "address of tokenA",
+						"tokenB": "address of tokenB"
+					},
+					"returns": {
+						"amountA": "Final amount of token A added",
+						"amountB": "Final amount of token B added",
+						"liquidity": "Amount of LP tokens minted"
+					}
+				},
 				"constructor": {
 					"params": {
 						"_tokenA": "Address of token A",
@@ -256,6 +389,9 @@
 		},
 		"userdoc": {
 			"events": {
+				"InitialLiquidityAdded(address,uint256,uint256,uint256)": {
+					"notice": "Emitted when INITIAL liquidity is added to the pool"
+				},
 				"LiquidityAdded(address,uint256,uint256,uint256)": {
 					"notice": "Emitted when liquidity is added to the pool"
 				},
@@ -268,6 +404,9 @@
 			},
 			"kind": "user",
 			"methods": {
+				"addLiquidity(address,address,uint256,uint256,uint256,uint256,address,uint256)": {
+					"notice": "Adds liquidity to the pool and mints LP tokens"
+				},
 				"constructor": {
 					"notice": "Initializes the contract with the two token addresses"
 				},
@@ -276,6 +415,9 @@
 				},
 				"name()": {
 					"notice": "Returns the name of the LP token"
+				},
+				"owner()": {
+					"notice": "owner Address of the provider of LP tokens (initialized by the contract)"
 				},
 				"reserveA()": {
 					"notice": "Current reserve of token A held by the pool"
@@ -322,11 +464,11 @@
 			]
 		},
 		"SimpleSwap.sol": {
-			"keccak256": "0x6a2475000f98f300f8b87f9dfd24c8040eea22026254b669ed5cf8c7fe6251fc",
+			"keccak256": "0x4de1685021433e570b5fd22d1c654e04f64f3b295e72bc7201d234498a671792",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e9cf9d76483cb545a10213de66f209e4a7addb0c1886d88974a1ff7733216c48",
-				"dweb:/ipfs/QmRgL1eJMbDcDSC9BV34UafCt82PR3E53XRej3QCkUrAtr"
+				"bzz-raw://bd0895417040e91a37cfc94b0ca36b5011aaa3fc15e8b16a8c3966eb6ef4c3b1",
+				"dweb:/ipfs/QmbfjLhhDruyEEw337YjBVa7cEzp5nCU7oQ4VcxYVvERFV"
 			]
 		}
 	},
