@@ -56,6 +56,13 @@
 				"type": "event"
 			},
 			{
+				"inputs": [],
+				"name": "addLiquidity",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -117,6 +124,58 @@
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveA",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveB",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "tokenA",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "tokenB",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -252,11 +311,11 @@
 			]
 		},
 		"SimpleSwap.sol": {
-			"keccak256": "0xc4578512afe7a099403dd81e13b1f7c63e47bdddaefe8c6e47e4105adbdb8f15",
+			"keccak256": "0x32ab8e5418bc15ad06a171d557346c997d3e80ed8a65b0850c0384f65e1ebd0b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://acc46d5c1acd366346be1cc3d6948ad685b5665acbdc9991225394ee7f5446da",
-				"dweb:/ipfs/QmYC9kew9iqEPVxPm892dTcdZWz86VKUXXWG8j4FG4szU8"
+				"bzz-raw://33b82df77f6a606727c60edb46c825109000e2d7a79e6fd33c04f6dc1706ded2",
+				"dweb:/ipfs/QmWqCkoLrSY3teKm9dBydJKrdaf27DAxAZDxeXYW8dmh1S"
 			]
 		}
 	},

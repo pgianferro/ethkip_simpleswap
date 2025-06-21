@@ -1,0 +1,334 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_tokenA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_tokenB",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "provider",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountA",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountB",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "liquidityMinted",
+						"type": "uint256"
+					}
+				],
+				"name": "LiquidityAdded",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "provider",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountA",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountB",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "liquidityBurned",
+						"type": "uint256"
+					}
+				],
+				"name": "LiquidityRemoved",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "swapper",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tokenIn",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountIn",
+						"type": "uint256"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "tokenOut",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "amountOut",
+						"type": "uint256"
+					}
+				],
+				"name": "TokensSwapped",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "decimals",
+				"outputs": [
+					{
+						"internalType": "uint8",
+						"name": "",
+						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "name",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveA",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reserveB",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "symbol",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "tokenA",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "tokenB",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"author": "Pablo Gianferro",
+			"details": "This contract handles tokenA and tokenB liquidity pools and manages internal LP tokens.      LP tokens are not ERC20-compatible but are tracked via internal mappings.",
+			"events": {
+				"LiquidityAdded(address,uint256,uint256,uint256)": {
+					"params": {
+						"amountA": "Amount of token A added",
+						"amountB": "Amount of token B added",
+						"liquidityMinted": "Amount of LP tokens minted",
+						"provider": "Address of the liquidity provider"
+					}
+				},
+				"LiquidityRemoved(address,uint256,uint256,uint256)": {
+					"params": {
+						"amountA": "Amount of token A returned",
+						"amountB": "Amount of token B returned",
+						"liquidityBurned": "Amount of LP tokens burned",
+						"provider": "Address of the liquidity provider"
+					}
+				},
+				"TokensSwapped(address,address,uint256,address,uint256)": {
+					"params": {
+						"amountIn": "Amount of token sent",
+						"amountOut": "Amount of token received",
+						"swapper": "Address performing the swap",
+						"tokenIn": "Address of the token sent in",
+						"tokenOut": "Address of the token received"
+					}
+				}
+			},
+			"kind": "dev",
+			"methods": {
+				"constructor": {
+					"params": {
+						"_tokenA": "Address of token A",
+						"_tokenB": "Address of token B"
+					}
+				}
+			},
+			"title": "SimpleSwap",
+			"version": 1
+		},
+		"userdoc": {
+			"events": {
+				"LiquidityAdded(address,uint256,uint256,uint256)": {
+					"notice": "Emitted when liquidity is added to the pool"
+				},
+				"LiquidityRemoved(address,uint256,uint256,uint256)": {
+					"notice": "Emitted when liquidity is removed from the pool"
+				},
+				"TokensSwapped(address,address,uint256,address,uint256)": {
+					"notice": "Emitted when a token swap is performed"
+				}
+			},
+			"kind": "user",
+			"methods": {
+				"constructor": {
+					"notice": "Initializes the contract with the two token addresses"
+				},
+				"decimals()": {
+					"notice": "Returns the number of decimals used for the LP token"
+				},
+				"name()": {
+					"notice": "Returns the name of the LP token"
+				},
+				"reserveA()": {
+					"notice": "Current reserve of token A held by the pool"
+				},
+				"reserveB()": {
+					"notice": "Current reserve of token B held by the pool"
+				},
+				"symbol()": {
+					"notice": "Returns the symbol of the LP token"
+				},
+				"tokenA()": {
+					"notice": "Address of token A"
+				},
+				"tokenB()": {
+					"notice": "Address of token B"
+				}
+			},
+			"notice": "ETHKIPU TP MODULE 3: A simplified implementation of a Uniswap-like liquidity pool for two ERC20 tokens.",
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"SimpleSwap.sol": "SimpleSwap"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xe06a3f08a987af6ad2e1c1e774405d4fe08f1694b67517438b467cecf0da0ef7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://df6f0c459663c9858b6cba2cda1d14a7d05a985bed6d2de72bd8e78c25ee79db",
+				"dweb:/ipfs/QmeTTxZ7qVk9rjEv2R4CpCwdf8UMCcRqDNMvzNxHc3Fnn9"
+			]
+		},
+		"SimpleSwap.sol": {
+			"keccak256": "0x6a2475000f98f300f8b87f9dfd24c8040eea22026254b669ed5cf8c7fe6251fc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://e9cf9d76483cb545a10213de66f209e4a7addb0c1886d88974a1ff7733216c48",
+				"dweb:/ipfs/QmRgL1eJMbDcDSC9BV34UafCt82PR3E53XRej3QCkUrAtr"
+			]
+		}
+	},
+	"version": 1
+}
