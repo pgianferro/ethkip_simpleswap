@@ -255,6 +255,60 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenA_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenB_",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "liquidity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountAMin",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountBMin",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "removeLiquidity",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountA",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountB",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "reserveA",
 				"outputs": [
@@ -382,6 +436,21 @@
 						"_tokenA": "Address of token A",
 						"_tokenB": "Address of token B"
 					}
+				},
+				"removeLiquidity(address,address,uint256,uint256,uint256,address,uint256)": {
+					"params": {
+						"amountAMin": "Minimum accepted amount of token A",
+						"amountBMin": "Minimum accepted amount of token B",
+						"deadline": "Transaction expiry timestamp",
+						"liquidity": "amount of LP tokens to burn",
+						"to": "Address to receive tokens",
+						"tokenA_": "address of tokenA",
+						"tokenB_": "address of tokenB"
+					},
+					"returns": {
+						"amountA": "Final amount of token A added",
+						"amountB": "Final amount of token B added"
+					}
 				}
 			},
 			"title": "SimpleSwap",
@@ -418,6 +487,9 @@
 				},
 				"owner()": {
 					"notice": "owner Address of the provider of LP tokens (initialized by the contract)"
+				},
+				"removeLiquidity(address,address,uint256,uint256,uint256,address,uint256)": {
+					"notice": "Removes liquidity from the pool and burns LP tokens"
 				},
 				"reserveA()": {
 					"notice": "Current reserve of token A held by the pool"
@@ -488,11 +560,11 @@
 			]
 		},
 		"SimpleSwap.sol": {
-			"keccak256": "0xead4337c0b2fb74482ee5f956ca35f39c01423b53185b12416c64a43fe7182eb",
+			"keccak256": "0xb7bbcdb16ff23da4249fc096a999e38f95a43bc26f8dd1afaef933eb1ca00fd4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7f763f7b77aa44be58814e7da6577e89024dd7bf7165de9a7c79fa9f14d3a896",
-				"dweb:/ipfs/QmZE2ieq2pQTcmS8bqmdb3pncwxHBy2LupN9kQAbUjaQu7"
+				"bzz-raw://4abd4eef5777d7a71a2482befc494644221449a959adffb4b0d1c42f4df39787",
+				"dweb:/ipfs/QmPeQyWQvCd6rDy53RAaisBuQmTcFbv7XVKPK2pJgfK798"
 			]
 		}
 	},

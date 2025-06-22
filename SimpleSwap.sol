@@ -190,6 +190,46 @@ contract SimpleSwap {
 
     }
 
+/// @notice Removes liquidity from the pool and burns LP tokens
+    /// @param tokenA_ address of tokenA
+    /// @param tokenB_ address of tokenB
+    /// @param liquidity amount of LP tokens to burn
+    /// @param amountAMin Minimum accepted amount of token A
+    /// @param amountBMin Minimum accepted amount of token B
+    /// @param to Address to receive tokens
+    /// @param deadline Transaction expiry timestamp
+    /// @return amountA Final amount of token A added
+    /// @return amountB Final amount of token B added
+    function removeLiquidity (address tokenA_, address tokenB_, uint liquidity, uint amountAMin, uint amountBMin, address to, uint deadline) external returns (uint amountA, uint amountB) {
+
+        require(deadline > block.timestamp, "Transaction expired");
+        require(tokenA_ == tokenA && tokenB_ == tokenB, "Invalid token pair");
+
+        //Calculates amount of token A and B to return to user
+        amountA = (liquidity * reserveA) / _totalSupply;
+        amountB = (liquidity * reserveB) / _totalSupply;
+
+        require(amountA >= amountAMin, "amountA below minimum");
+        require(amountB >= amountBMin, "amountB below minimum");
+        require(_balanceOf[msg.sender] >= liquidity, "Insufficient LP balance");
+        require(reserveA >= amountA && reserveB >= amountB, "Insufficient reserves");
+
+        //Burns the LP tokens equivalent to the liquidity param from user
+        _balanceOf[msg.sender] -=liquidity;
+        _totalSupply -=liquidity;
+
+        //Transfers the tokens to user
+
+        IERC20(tokenA).transfer(to, amountA);
+        IERC20(tokenB).transfer(to, amountB);
+
+        //State
+        reserveA -= amountA;
+        reserveB -= amountB;
+
+       emit LiquidityRemoved(msg.sender, amountA, amountB, liquidity);
+
+    }
 
 
 }
