@@ -38,7 +38,14 @@ This repository contains the Solidity implementation of `SimpleSwap`, a simplifi
 
 ## 🚀 Deployment & Verification
 
-You must deploy the contract on a testnet (e.g., Goerli, Sepolia) using MetaMask and Remix, and copy the resulting contract address for verification.
+The `SimpleSwap` contract was successfully deployed to the **Ethereum Sepolia testnet** using **Remix IDE** and **MetaMask**.
+
+- **Contract Address:** [`0x098A34D8c5Ba4B6737E8fDa9c498C6170184a51C`](https://sepolia.etherscan.io/address/0x098A34D8c5Ba4B6737E8fDa9c498C6170184a51C)
+- **Deployed with:** EVM version `prague`
+- **Token A (M10):** [`0x7d0EC05eBA3e804c1Be44496fE8Ce40EAD2EAC85`](https://sepolia.etherscan.io/address/0x7d0EC05eBA3e804c1Be44496fE8Ce40EAD2EAC85)
+- **Token B (CR7):** [`0x3097ba96c610b257FB87615d8602F306ba196703`](https://sepolia.etherscan.io/address/0x3097ba96c610b257FB87615d8602F306ba196703)
+
+✅ The contract is ready for source code verification using tools like **Remix**, **Etherscan**, or **Sourcify**.
 
 ## 📝 License
 
