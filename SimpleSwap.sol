@@ -190,7 +190,7 @@ contract SimpleSwap {
 
     }
 
-/// @notice Removes liquidity from the pool and burns LP tokens
+    /// @notice Removes liquidity from the pool and burns LP tokens
     /// @param tokenA_ address of tokenA
     /// @param tokenB_ address of tokenB
     /// @param liquidity amount of LP tokens to burn
@@ -229,7 +229,53 @@ contract SimpleSwap {
 
        emit LiquidityRemoved(msg.sender, amountA, amountB, liquidity);
 
+       return (amountA, amountB);
+
     }
 
+    /// @notice Exchanges one token for another in the exact amount.
+    /// @param amountIn Amount of input tokens.
+    /// @param amountOutMin: Minimum acceptable number of output tokens.
+    /// @param path: Array of token addresses. (input token, output token)
+    /// param to: Recipient address.
+    /// @param deadline: Timestamp for the transaction.
+    /// @param amounts: Array with input and output amounts.
+    function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts) {
+        
+        require(deadline > block.timestamp, "Transaction expired");
+        require(path.length == 2 && path[0] != path[1], "invalid pair of tokens");
+        require( (path[0] == tokenA && path[1] == tokenB) || (path[0] == tokenB && path[1] == tokenA), "invalid token pair");
+        require(amountIn > 0, "insufficient amountIn");
 
+        uint256 amountOut;
+
+        if (path[0] == tokenA) {
+            IERC20(tokenA).transferFrom(msg.sender, address(this), amountIn);
+            amountOut = (amountIn * reserveB) / (reserveA + amountIn);
+            require(amountOut >= amountOutMin, "insuficient amountOut");
+            IERC20(tokenB).transfer(to, amountOut);
+            reserveA += amountIn;
+            reserveB -= amountOut;
+
+        } else {
+            
+            IERC20(tokenB).transferFrom(msg.sender, address(this), amountIn);
+            amountOut = (amountIn * reserveA) / (reserveB + amountIn);
+            require(amountOut >= amountOutMin, "insuficient amountOut");
+            IERC20(tokenA).transfer(to, amountOut); 
+            reserveA += amountIn;
+            reserveB -= amountOut;
+            
+        }
+        
+        amounts = new uint[](2) ;
+        amounts[0] = amountIn;
+        amounts[1] = amountOut;
+
+        emit TokensSwapped(msg.sender, path[0], amountIn, path[1], amountOut);
+
+        return amounts;
+
+
+    }
 }

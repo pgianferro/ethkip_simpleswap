@@ -335,6 +335,45 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amountOutMin",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address[]",
+						"name": "path",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "deadline",
+						"type": "uint256"
+					}
+				],
+				"name": "swapExactTokensForTokens",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "amounts",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "symbol",
 				"outputs": [
@@ -451,6 +490,15 @@
 						"amountA": "Final amount of token A added",
 						"amountB": "Final amount of token B added"
 					}
+				},
+				"swapExactTokensForTokens(uint256,uint256,address[],address,uint256)": {
+					"params": {
+						"amountIn": "Amount of input tokens.",
+						"amountOutMin": ": Minimum acceptable number of output tokens.",
+						"amounts": ": Array with input and output amounts.",
+						"deadline": ": Timestamp for the transaction.",
+						"path": ": Array of token addresses. (input token, output token) param to: Recipient address."
+					}
 				}
 			},
 			"title": "SimpleSwap",
@@ -496,6 +544,9 @@
 				},
 				"reserveB()": {
 					"notice": "Current reserve of token B held by the pool"
+				},
+				"swapExactTokensForTokens(uint256,uint256,address[],address,uint256)": {
+					"notice": "Exchanges one token for another in the exact amount."
 				},
 				"symbol()": {
 					"notice": "Returns the symbol of the LP token"
@@ -560,11 +611,11 @@
 			]
 		},
 		"SimpleSwap.sol": {
-			"keccak256": "0xb7bbcdb16ff23da4249fc096a999e38f95a43bc26f8dd1afaef933eb1ca00fd4",
+			"keccak256": "0x8cd6abd46477525339b95d2975331af67bf83785454fc5eccce5ac9d36da45d4",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://4abd4eef5777d7a71a2482befc494644221449a959adffb4b0d1c42f4df39787",
-				"dweb:/ipfs/QmPeQyWQvCd6rDy53RAaisBuQmTcFbv7XVKPK2pJgfK798"
+				"bzz-raw://9172281259fac7e3ed82f312210aef61572794603a2673b2e50603169b5bf6af",
+				"dweb:/ipfs/QmeZLawav6XHWHgn5y6RR9EbtRBA2BwoUE1wvNNQjMdKfz"
 			]
 		}
 	},
