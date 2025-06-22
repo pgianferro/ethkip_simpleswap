@@ -229,6 +229,30 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenA_",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenB_",
+						"type": "address"
+					}
+				],
+				"name": "getPrice",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "name",
 				"outputs": [
@@ -476,6 +500,15 @@
 						"_tokenB": "Address of token B"
 					}
 				},
+				"getPrice(address,address)": {
+					"params": {
+						"tokenA_": "Address of the first ERC20 token to calculate a price for.",
+						"tokenB_": "Address of the second ERC20 token to calculate a price for."
+					},
+					"returns": {
+						"price": "Price of tokenA in terms of tokenB"
+					}
+				},
 				"removeLiquidity(address,address,uint256,uint256,uint256,address,uint256)": {
 					"params": {
 						"amountAMin": "Minimum accepted amount of token A",
@@ -495,9 +528,11 @@
 					"params": {
 						"amountIn": "Amount of input tokens.",
 						"amountOutMin": ": Minimum acceptable number of output tokens.",
-						"amounts": ": Array with input and output amounts.",
 						"deadline": ": Timestamp for the transaction.",
 						"path": ": Array of token addresses. (input token, output token) param to: Recipient address."
+					},
+					"returns": {
+						"amounts": ": Array with input and output amounts."
 					}
 				}
 			},
@@ -529,6 +564,9 @@
 				},
 				"decimals()": {
 					"notice": "Returns the number of decimals used for the LP token"
+				},
+				"getPrice(address,address)": {
+					"notice": "Gets the price of one token in terms of another."
 				},
 				"name()": {
 					"notice": "Returns the name of the LP token"
@@ -611,11 +649,11 @@
 			]
 		},
 		"SimpleSwap.sol": {
-			"keccak256": "0x8cd6abd46477525339b95d2975331af67bf83785454fc5eccce5ac9d36da45d4",
+			"keccak256": "0x1ef87a5dac4a5deface323307d39f3d434d3e95cdfc0120ea07ecb19c45cba21",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://9172281259fac7e3ed82f312210aef61572794603a2673b2e50603169b5bf6af",
-				"dweb:/ipfs/QmeZLawav6XHWHgn5y6RR9EbtRBA2BwoUE1wvNNQjMdKfz"
+				"bzz-raw://6891b9d7b4c06cb469e6f4d083b7c848c94492def9bb4fe8f02d65464fac50a3",
+				"dweb:/ipfs/QmRbuQZkrsb32zNHv8m5GWZuCp8LYtYWkRQ26GgfiMCdFw"
 			]
 		}
 	},

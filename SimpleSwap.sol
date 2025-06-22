@@ -239,7 +239,7 @@ contract SimpleSwap {
     /// @param path: Array of token addresses. (input token, output token)
     /// param to: Recipient address.
     /// @param deadline: Timestamp for the transaction.
-    /// @param amounts: Array with input and output amounts.
+    /// @return amounts : Array with input and output amounts.
     function swapExactTokensForTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external returns (uint[] memory amounts) {
         
         require(deadline > block.timestamp, "Transaction expired");
@@ -278,4 +278,31 @@ contract SimpleSwap {
 
 
     }
+    
+    ///@notice Gets the price of one token in terms of another.
+    ///@param tokenA_ Address of the first ERC20 token to calculate a price for.
+    ///@param tokenB_ Address of the second ERC20 token to calculate a price for.
+    ///@return price Price of tokenA in terms of tokenB
+    function getPrice(address tokenA_, address tokenB_) external view returns (uint price) {
+
+        require(
+        (tokenA_ == tokenA && tokenB_ == tokenB) || (tokenA_ == tokenB && tokenB_ == tokenA),
+        "Invalid token pair"
+    );
+
+        //Obtains reserves
+        uint256 reserveA_ = reserveA;
+        uint256 reserveB_ = reserveB;
+
+        require(reserveA_ > 0, "No liquidity for tokenA");
+            
+        // Calculates price
+        price = reserveB_ * 1e18 / reserveA_;
+        
+        return price;
+            
+    }
+
+
+
 }
