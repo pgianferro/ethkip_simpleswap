@@ -231,6 +231,35 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "amountIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reserveIn",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reserveOut",
+						"type": "uint256"
+					}
+				],
+				"name": "getAmountOut",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "amountOut",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "address",
 						"name": "tokenA_",
 						"type": "address"
@@ -500,6 +529,15 @@
 						"_tokenB": "Address of token B"
 					}
 				},
+				"getAmountOut(uint256,uint256,uint256)": {
+					"params": {
+						"amountIn": ": Amount of input tokens.",
+						"reserveIn": ", reserveOut: Current reserves in the contract."
+					},
+					"returns": {
+						"amountOut": ": Amount of tokens to receive."
+					}
+				},
 				"getPrice(address,address)": {
 					"params": {
 						"tokenA_": "Address of the first ERC20 token to calculate a price for.",
@@ -564,6 +602,9 @@
 				},
 				"decimals()": {
 					"notice": "Returns the number of decimals used for the LP token"
+				},
+				"getAmountOut(uint256,uint256,uint256)": {
+					"notice": "calculate how many tokens will be received when exchanging"
 				},
 				"getPrice(address,address)": {
 					"notice": "Gets the price of one token in terms of another."
@@ -649,11 +690,11 @@
 			]
 		},
 		"SimpleSwap.sol": {
-			"keccak256": "0x1ef87a5dac4a5deface323307d39f3d434d3e95cdfc0120ea07ecb19c45cba21",
+			"keccak256": "0x76caee6f3e89da6849e2a5df70eb7814450afc4c1eb78e6473718f84e1639eb7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6891b9d7b4c06cb469e6f4d083b7c848c94492def9bb4fe8f02d65464fac50a3",
-				"dweb:/ipfs/QmRbuQZkrsb32zNHv8m5GWZuCp8LYtYWkRQ26GgfiMCdFw"
+				"bzz-raw://8731445757dc407478d8d0f3734b40ace0150cf86b9613ddbc01406df4a209ac",
+				"dweb:/ipfs/Qmag3efneXR2x5hK64CcQJkQwzMkKHaApbxMVg2XMDciNW"
 			]
 		}
 	},

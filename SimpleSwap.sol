@@ -302,7 +302,20 @@ contract SimpleSwap {
         return price;
             
     }
+    
+    
+    ///@notice calculate how many tokens will be received when exchanging
+    ///@param amountIn: Amount of input tokens.
+    ///@param reserveIn, reserveOut: Current reserves in the contract.
+    ///@return amountOut : Amount of tokens to receive.
+    function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) external pure returns (uint amountOut) {
+        require(amountIn > 0, "AmountIn < zero");
+        require(reserveIn > 0 && reserveOut > 0, "Reserves < zero");
 
+        amountOut = (amountIn * reserveOut) / (reserveIn + amountIn);
+
+        return amountOut;
+}
 
 
 }
