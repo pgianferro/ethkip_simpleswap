@@ -2,6 +2,7 @@
 pragma solidity >0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
 
 /// @title SimpleSwap
 /// @author Pablo Gianferro
@@ -100,8 +101,8 @@ contract SimpleSwap {
     }
 
     /// @notice Adds liquidity to the pool and mints LP tokens
-    /// @param tokenA address of tokenA
-    /// @param tokenB address of tokenB
+    /// @param tokenA_ address of tokenA
+    /// @param tokenB_ address of tokenB
     /// @param amountADesired Amount of token A to add
     /// @param amountBDesired Amount of token B to add
     /// @param amountAMin Minimum accepted amount of token A
@@ -111,25 +112,26 @@ contract SimpleSwap {
     /// @return amountA Final amount of token A added
     /// @return amountB Final amount of token B added
     /// @return liquidity Amount of LP tokens minted
-    function addLiquidity(address tokenA, address tokenB, uint amountADesired, uint amountBDesired, uint amountAMin, uint amountBMin, address to, uint deadline) external returns (uint amountA, uint amountB, uint liquidity) {
+    function addLiquidity(address tokenA_, address tokenB_, uint amountADesired, uint amountBDesired, uint amountAMin, uint amountBMin, address to, uint deadline) external returns (uint amountA, uint amountB, uint liquidity) {
         
  if (reserveA == 0 && reserveB == 0) {
-        // Solo el owner puede hacer la primera llamada
+        // Only the owner can make the first call
         require(msg.sender == owner, "Only owner can initialize");
+        require(to == owner, "Initial LP must be assigned to owner");
 
-        // Silenciar warnings por parámetros no usados en este branch
+        // Silence warnings for unused parameters in this branch
         tokenA; tokenB; amountADesired; amountBDesired; amountAMin; amountBMin; deadline;
 
-        // Montos fijos, no se usan los amountDesired
+        // Fixed amounts, amountDesired is not used
         amountA = 1000 * 1e18;
         amountB = 1000 * 1e18;
         liquidity = 1000 * 1e18;
 
-        // Transferencias
+        // Transfers
         IERC20(tokenA).transferFrom(owner, address(this), amountA);
         IERC20(tokenB).transferFrom(owner, address(this), amountB);
 
-        // Estado
+        // State
         reserveA = amountA;
         reserveB = amountB;
         _totalSupply = liquidity;
@@ -140,15 +142,52 @@ contract SimpleSwap {
         return (amountA, amountB, liquidity);
 
     } else {
-        // ✅ Lógica normal de addLiquidity para cualquier usuario
-        // (usando amountADesired, amountBDesired, etc.)
+        
+        require(deadline > block.timestamp, "Transaction expired");
+        
+        //Read current reserves
+        uint256 _reserveA = reserveA;
+        uint256 _reserveB = reserveB;
+
+        //Calculate de amount of B token that keeps the originals pool's proportions
+        uint256 amountBOptimal = (amountADesired * _reserveB) / _reserveA;
+        
+        if (amountBOptimal <= amountBDesired) {
+    require(amountBOptimal >= amountBMin, "insufficient B");
+    amountA = amountADesired;
+    amountB = amountBOptimal;
+    } else {
+    uint256 amountAOptimal = (amountBDesired * _reserveA) / _reserveB;
+    require(amountAOptimal <= amountADesired, "too much A");
+    require(amountAOptimal >= amountAMin, "not enough A");
+    amountA = amountAOptimal;
+    amountB = amountBDesired;
     }
-        
-        //Transferir tokens del usuario al contrato. (approve antes???)
-        //Calcular y asignar liquidez según reservas.
-        //Emitir tokens de liquidez al usuario.
-        
-        
+
+    //Transfers the tokens to the contract
+    require(tokenA_ == tokenA && tokenB_ == tokenB, "Invalid token pair");
+    IERC20(tokenA).transferFrom(msg.sender, address(this), amountA);
+    IERC20(tokenB).transferFrom(msg.sender, address(this), amountB);
+
+    //Mint LP Tokens
+    liquidity = Math.min(
+    (amountA * _totalSupply) / _reserveA,
+    (amountB * _totalSupply) / _reserveB
+    );
+
+    //State update
+    reserveA +=amountA;
+    reserveB +=amountB;
+    _totalSupply += liquidity;
+	_balanceOf[to] += liquidity;
+
+    emit LiquidityAdded(msg.sender, amountA, amountB, liquidity);
+
+    return (amountA, amountB, liquidity);
+
+}
+
+
     }
 
 
