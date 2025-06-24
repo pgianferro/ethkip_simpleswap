@@ -567,7 +567,8 @@
 						"amountIn": "Amount of input tokens.",
 						"amountOutMin": ": Minimum acceptable number of output tokens.",
 						"deadline": ": Timestamp for the transaction.",
-						"path": ": Array of token addresses. (input token, output token) param to: Recipient address."
+						"path": ": Array of token addresses. (input token, output token)",
+						"to": ": Recipient address."
 					},
 					"returns": {
 						"amounts": ": Array with input and output amounts."
@@ -604,7 +605,7 @@
 					"notice": "Returns the number of decimals used for the LP token"
 				},
 				"getAmountOut(uint256,uint256,uint256)": {
-					"notice": "calculate how many tokens will be received when exchanging"
+					"notice": "Calculates how many tokens will be received when exchanging"
 				},
 				"getPrice(address,address)": {
 					"notice": "Gets the price of one token in terms of another."
@@ -690,11 +691,11 @@
 			]
 		},
 		"SimpleSwap.sol": {
-			"keccak256": "0x76caee6f3e89da6849e2a5df70eb7814450afc4c1eb78e6473718f84e1639eb7",
+			"keccak256": "0xb1fda41578d9a45c33bc78b5899b5709e7e3ebbf124986003f5ee449a6596699",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8731445757dc407478d8d0f3734b40ace0150cf86b9613ddbc01406df4a209ac",
-				"dweb:/ipfs/Qmag3efneXR2x5hK64CcQJkQwzMkKHaApbxMVg2XMDciNW"
+				"bzz-raw://c130e0ceec5975d55bb87d56592beae2ea9e49d6e1db3053b2da70df5ea5cb03",
+				"dweb:/ipfs/QmRVYKqbxKwYvnsd6APZ3Wr9agVeJw1mjwGib7MvFj6VnV"
 			]
 		}
 	},
