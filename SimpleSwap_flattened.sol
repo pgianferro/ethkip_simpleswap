@@ -1,4 +1,3 @@
-// SPDX-License-Identifier: MIT
 
 // File: @openzeppelin/contracts/token/ERC20/IERC20.sol
 
@@ -2208,31 +2207,19 @@ contract SimpleSwap {
             uint256 liquidity
         )
     {
-        require(deadline > block.timestamp, "expired");
+        require(deadline > block.timestamp, "Transact expired");
         require(tokenA_ == tokenA && tokenB_ == tokenB, "bad pair");
 
-        if (reserveA == 0 && reserveB == 0) {
-            require(amountADesired >= amountAMin, "insufficient A");
-            require(amountBDesired >= amountBMin, "insufficient B");
+        uint256 _reserveA = reserveA;
+        uint256 _reserveB = reserveB;
+        uint256 _supply = _totalSupply;
 
+        if (_reserveA == 0 && _reserveB == 0) {
+            // First add: use amountDesired for A and B
             amountA = amountADesired;
             amountB = amountBDesired;
-            liquidity = Math.sqrt(amountA * amountB);
-
-            IERC20(tokenA).transferFrom(msg.sender, address(this), amountA);
-            IERC20(tokenB).transferFrom(msg.sender, address(this), amountB);
-
-            reserveA = amountA;
-            reserveB = amountB;
-            _totalSupply = liquidity;
-            _balanceOf[to] = liquidity;
-
-            emit InitialLiquidityAdded(msg.sender, amountA, amountB, liquidity);
-            return (amountA, amountB, liquidity);
         } else {
-            uint256 _reserveA = reserveA;
-            uint256 _reserveB = reserveB;
-
+            //Mantain pool proportion
             uint256 amountBOptimal = (amountADesired * _reserveB) / _reserveA;
 
             if (amountBOptimal <= amountBDesired) {
@@ -2242,28 +2229,34 @@ contract SimpleSwap {
             } else {
                 uint256 amountAOptimal = (amountBDesired * _reserveA) /
                     _reserveB;
-                require(amountAOptimal <= amountADesired, "too much A");
+                require(amountAOptimal <= amountADesired, "A high");
                 require(amountAOptimal >= amountAMin, "A low");
                 amountA = amountAOptimal;
                 amountB = amountBDesired;
             }
-
-            IERC20(tokenA).transferFrom(msg.sender, address(this), amountA);
-            IERC20(tokenB).transferFrom(msg.sender, address(this), amountB);
-
-            liquidity = Math.min(
-                (amountA * _totalSupply) / _reserveA,
-                (amountB * _totalSupply) / _reserveB
-            );
-
-            reserveA += amountA;
-            reserveB += amountB;
-            _totalSupply += liquidity;
-            _balanceOf[to] += liquidity;
-
-            emit LiquidityAdded(msg.sender, amountA, amountB, liquidity);
-            return (amountA, amountB, liquidity);
         }
+
+        IERC20(tokenA).transferFrom(msg.sender, address(this), amountA);
+        IERC20(tokenB).transferFrom(msg.sender, address(this), amountB);
+
+        if (_supply == 0) {
+            liquidity = Math.sqrt(amountA * amountB);
+        } else {
+            liquidity = Math.min(
+                (amountA * _supply) / _reserveA,
+                (amountB * _supply) / _reserveB
+            );
+        }
+
+        require(liquidity > 0, "zero liq");
+
+        reserveA += amountA;
+        reserveB += amountB;
+        _totalSupply += liquidity;
+        _balanceOf[to] += liquidity;
+
+        emit LiquidityAdded(msg.sender, amountA, amountB, liquidity);
+        return (amountA, amountB, liquidity);
     }
 
     /// @notice Removes liquidity from the pool and burns LP tokens
