@@ -278,7 +278,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"CR7_flattened.sol": "IERC20Metadata"
+			"M10_flattened.sol": "IERC20Metadata"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -292,12 +292,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"CR7_flattened.sol": {
-			"keccak256": "0x7c5e9c0524467a5f56e2a17613d37fbef488784709f1d2d12787f5b38dab055e",
+		"M10_flattened.sol": {
+			"keccak256": "0x50e0bf5884277e254c873684b6ac954b93ffd8f6437210b2ad28b0113e21b650",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://e1156432fd960e64214679e40232dc9dab7185f5d5976d6aee5d2660d6177df4",
-				"dweb:/ipfs/QmU7f8w3L1JtbEtVAujxsUPfEWd6vM3AsRzhScLKYnqpKF"
+				"bzz-raw://37a501a4244e9b197760cec73737ae26200b6cbe9d36d951d90da86cb0ee137e",
+				"dweb:/ipfs/QmUUiWnERQVbBXQGkbNKB3PvtqgyjDhdtv3HMUnCnaxnz8"
 			]
 		}
 	},

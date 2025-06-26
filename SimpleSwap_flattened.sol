@@ -1,6 +1,5 @@
-
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+
 // File: @openzeppelin/contracts/token/ERC20/IERC20.sol
 
 
@@ -2209,20 +2208,10 @@ contract SimpleSwap {
             uint256 liquidity
         )
     {
-        address _tokenA = tokenA;
-        address _tokenB = tokenB;
+        require(deadline > block.timestamp, "expired");
+        require(tokenA_ == tokenA && tokenB_ == tokenB, "bad pair");
 
         if (reserveA == 0 && reserveB == 0) {
-            // Only the owner can make the first call
-            require(msg.sender == owner, "only owner");
-            require(to == owner, "init LP only owner");
-
-            // Silence warnings for unused parameters in this branch
-            tokenA_;
-            tokenB_;
-            deadline;
-
-            // Fixed amounts, amountDesired is not used
             require(amountADesired >= amountAMin, "insufficient A");
             require(amountBDesired >= amountBMin, "insufficient B");
 
@@ -2230,28 +2219,20 @@ contract SimpleSwap {
             amountB = amountBDesired;
             liquidity = Math.sqrt(amountA * amountB);
 
-            // Transfers
-            IERC20(_tokenA).transferFrom(owner, address(this), amountA);
-            IERC20(_tokenB).transferFrom(owner, address(this), amountB);
+            IERC20(tokenA).transferFrom(msg.sender, address(this), amountA);
+            IERC20(tokenB).transferFrom(msg.sender, address(this), amountB);
 
-            // State
             reserveA = amountA;
             reserveB = amountB;
             _totalSupply = liquidity;
             _balanceOf[to] = liquidity;
 
-            emit InitialLiquidityAdded(owner, amountA, amountB, liquidity);
-
+            emit InitialLiquidityAdded(msg.sender, amountA, amountB, liquidity);
             return (amountA, amountB, liquidity);
         } else {
-            require(deadline > block.timestamp, "expired");
-            require(tokenA_ == _tokenA && tokenB_ == _tokenB, "bad pair");
-
-            //Read current reserves
             uint256 _reserveA = reserveA;
             uint256 _reserveB = reserveB;
 
-            //Calculate de amount of B token that keeps the originals pool's proportions
             uint256 amountBOptimal = (amountADesired * _reserveB) / _reserveA;
 
             if (amountBOptimal <= amountBDesired) {
@@ -2259,32 +2240,28 @@ contract SimpleSwap {
                 amountA = amountADesired;
                 amountB = amountBOptimal;
             } else {
-                uint256 amountAOptimal = (amountBDesired * _reserveA) / _reserveB;
+                uint256 amountAOptimal = (amountBDesired * _reserveA) /
+                    _reserveB;
                 require(amountAOptimal <= amountADesired, "too much A");
                 require(amountAOptimal >= amountAMin, "A low");
                 amountA = amountAOptimal;
                 amountB = amountBDesired;
             }
 
-            //Transfers the tokens to the contract
-            
-            IERC20(_tokenA).transferFrom(msg.sender, address(this), amountA);
-            IERC20(_tokenB).transferFrom(msg.sender, address(this), amountB);
+            IERC20(tokenA).transferFrom(msg.sender, address(this), amountA);
+            IERC20(tokenB).transferFrom(msg.sender, address(this), amountB);
 
-            //Mint LP Tokens
             liquidity = Math.min(
                 (amountA * _totalSupply) / _reserveA,
                 (amountB * _totalSupply) / _reserveB
             );
 
-            //State update
             reserveA += amountA;
             reserveB += amountB;
             _totalSupply += liquidity;
             _balanceOf[to] += liquidity;
 
             emit LiquidityAdded(msg.sender, amountA, amountB, liquidity);
-
             return (amountA, amountB, liquidity);
         }
     }
@@ -2310,12 +2287,11 @@ contract SimpleSwap {
     ) external returns (uint256 amountA, uint256 amountB) {
         require(deadline > block.timestamp, "expired");
 
-
         uint256 _reserveA = reserveA;
         uint256 _reserveB = reserveB;
         uint256 _total = _totalSupply;
         uint256 _userBalance = _balanceOf[msg.sender];
-        
+
         require(tokenA_ == tokenA && tokenB_ == tokenB, "bad pair");
 
         //Calculates amount of token A and B to return to user
@@ -2325,7 +2301,7 @@ contract SimpleSwap {
         require(amountA >= amountAMin, "A < min");
         require(amountB >= amountBMin, "B < min");
         require(_userBalance >= liquidity, "LP low");
-        require(_reserveA >= amountA && _reserveB >= amountB,"reserves low");
+        require(_reserveA >= amountA && _reserveB >= amountB, "reserves low");
 
         //Burns the LP tokens equivalent to the liquidity param from user
         _balanceOf[msg.sender] = _userBalance - liquidity;
@@ -2360,10 +2336,7 @@ contract SimpleSwap {
         uint256 deadline
     ) external returns (uint256[] memory amounts) {
         require(deadline > block.timestamp, "Transact expired");
-        require(
-            path.length == 2 && path[0] != path[1],
-            "invalid tokens"
-        );
+        require(path.length == 2 && path[0] != path[1], "invalid tokens");
         require(amountIn > 0, "amountIn 0");
 
         address _tokenA = tokenA;
@@ -2387,7 +2360,6 @@ contract SimpleSwap {
 
             reserveA = _reserveA + amountIn;
             reserveB = _reserveB - amountOut;
-
         } else {
             IERC20(_tokenB).transferFrom(msg.sender, address(this), amountIn);
             amountOut = (amountIn * _reserveA) / (_reserveB + amountIn);
@@ -2396,7 +2368,6 @@ contract SimpleSwap {
 
             reserveA = _reserveA - amountOut;
             reserveB = _reserveB + amountIn;
-
         }
 
         amounts = new uint256[](2);
