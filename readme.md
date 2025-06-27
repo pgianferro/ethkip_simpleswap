@@ -1,94 +1,98 @@
 # 💧 SimpleSwap Smart Contract
 
-`SimpleSwap` is a Solidity smart contract implementing a simplified decentralized exchange (DEX) inspired by Uniswap. It allows ERC20 token swaps, liquidity provision, and on-chain price queries.
+`SimpleSwap` es un contrato inteligente en Solidity que implementa un DEX (exchange descentralizado) simplificado inspirado en Uniswap. Permite intercambios entre tokens ERC20, provisión de liquidez y consultas de precio on-chain.
+
+---
+
+## 📑 Índice
+
+1. [Overview](#-overview)  
+2. [Guía de Integración para Front-End](#-guía-de-integración-para-front-end)  
+3. [Tecnologías Utilizadas](#-tecnologías-utilizadas)  
+4. [Detalles de Despliegue](#-detalles-de-despliegue)  
+5. [Guía de Uso](#-guía-de-uso)  
+6. [Checklist de Testing y Verificación](#-checklist-de-testing-y-verificación)  
+7. [Licencia](#-licencia)
 
 ---
 
 ## 🧠 Overview
 
-This contract supports:
+Este contrato soporta:
 
-- Adding liquidity to a pool of two ERC20 tokens.
-- Removing liquidity and redeeming the underlying assets.
-- Swapping one token for another using an automated market-making formula.
-- Retrieving current token prices based on reserves.
-- Issuing internal LP (liquidity provider) tokens (non-ERC20 compliant).
-
----
-
-## 📘 Front-End Integration Guide
-
-| Function | Type | Description |
-|---------|------|-------------|
-| `addLiquidity(...)` | External | Adds liquidity to the pool and mints LP tokens. Requires prior `approve()` on tokenA and tokenB. |
-| `removeLiquidity(...)` | External | Burns LP tokens and sends back corresponding tokenA and tokenB. |
-| `swapExactTokensForTokens(...)` | External | Swaps a fixed amount of tokenA for tokenB or vice versa. |
-| `getPrice(tokenA, tokenB)` | View | Returns the current exchange rate between tokenA and tokenB. |
-| `getAmountOut(amountIn, reserveIn, reserveOut)` | Pure | Estimates the output amount for a given input amount and reserves. |
-| `name()` / `symbol()` / `decimals()` | View | Returns metadata for the LP token. |
-| `reserveA` / `reserveB` / `tokenA` / `tokenB` | Public | Pool configuration and current reserves. |
-| `balanceOf(address)` | View | Returns the LP token balance of a given address. |
-| `totalSupply()` | View | Total supply of LP tokens. |
+- Agregar liquidez a un pool de dos tokens ERC20.  
+- Retirar liquidez y canjear los activos subyacentes.  
+- Intercambiar un token por otro usando una fórmula AMM.  
+- Consultar precios de tokens basados en reservas.  
+- Emitir tokens LP internos (no compatibles ERC20).  
 
 ---
 
-## 📂 Repository Structure
+## 📘 Guía de Integración para Front-End
 
-- `SimpleSwap.sol`: The main smart contract implementation.
-- `README.md`: This documentation.
-- `tokens/`: (Optional) Example ERC20 tokens used for testing.
-
----
-
-## 🛠️ Technologies Used
-
-- Solidity `^0.8.0`
-- OpenZeppelin:
-  - `IERC20.sol`
-  - `Math.sol`
-- Remix + MetaMask (deployment/testing)
-- Etherscan & Sourcify (source code verification)
+| Función                            | Tipo     | Descripción                                                                 |
+|------------------------------------|----------|-----------------------------------------------------------------------------|
+| `addLiquidity(...)`                | External | Agrega liquidez y emite tokens LP. Requiere `approve()` previo en ambos tokens. |
+| `removeLiquidity(...)`             | External | Quema tokens LP y devuelve tokenA y tokenB.                                |
+| `swapExactTokensForTokens(...)`    | External | Intercambia tokenA por tokenB o viceversa.                                 |
+| `getPrice(tokenA, tokenB)`         | View     | Devuelve el tipo de cambio actual entre tokenA y tokenB.                   |
+| `getAmountOut(amountIn, reserveIn, reserveOut)` | Pure | Estima el monto de salida dado un monto de entrada y reservas.             |
+| `name()` / `symbol()` / `decimals()` | View  | Metadata del token LP.                                                     |
+| `reserveA`, `reserveB`, `tokenA`, `tokenB` | Public | Configuración del pool y reservas actuales.                             |
+| `balanceOf(address)`               | View     | Balance de tokens LP.                                                      |
+| `totalSupply()`                    | View     | Suministro total de tokens LP.                                             | 
 
 ---
 
-## 🚀 Deployment Details
+## 🛠️ Tecnologías Utilizadas
 
-The contract was deployed on **Ethereum Sepolia Testnet** using Remix and MetaMask.
-
-| Component | Address |
-|----------|---------|
-| 📄 SimpleSwap Contract | [`0x098A34D8c5Ba4B6737E8fDa9c498C6170184a51C`](https://sepolia.etherscan.io/address/0x098A34D8c5Ba4B6737E8fDa9c498C6170184a51C) |
-| 🟦 Token A (M10) | [`0x7d0EC05eBA3e804c1Be44496fE8Ce40EAD2EAC85`](https://sepolia.etherscan.io/address/0x7d0EC05eBA3e804c1Be44496fE8Ce40EAD2EAC85) |
-| 🟥 Token B (CR7) | [`0x3097ba96c610b257FB87615d8602F306ba196703`](https://sepolia.etherscan.io/address/0x3097ba96c610b257FB87615d8602F306ba196703) |
-| 🔎 EVM Version | `prague` |
-
-> ✅ The contract can be verified using [Etherscan](https://sepolia.etherscan.io/) or [Sourcify](https://sourcify.dev/) with the correct compiler settings (Solidity v0.8.x, with or without optimization).
+- Solidity `^0.8.30`  
+- OpenZeppelin:  
+  - `IERC20.sol`  
+  - `Math.sol`  
+- Remix + MetaMask  
+- Verificación en Etherscan y Sourcify  
 
 ---
 
-## 🧪 Usage Guide
+## 🚀 Detalles de Despliegue
 
-1. **Initialize Pool:** Only the owner can call `addLiquidity()` the first time to initialize the pool. Requires `approve()` on both tokens.
-2. **Add Liquidity:** Users call `addLiquidity(...)` with desired amounts.
-3. **Swap Tokens:** Use `swapExactTokensForTokens(...)` with a valid token pair.
-4. **Price Query:** Call `getPrice(tokenA, tokenB)` to get the current exchange rate.
-5. **Remove Liquidity:** Call `removeLiquidity(...)` to withdraw tokens and burn LP tokens.
+Red: **Ethereum Sepolia Testnet**
 
----
+| Componente        | Dirección                                                                                                                                     | Verificación                                                                                                                                 |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| 📄 SimpleSwap     | [`0xD1E9aEb4626A96301559806e60068494FB6AC334`](https://sepolia.etherscan.io/address/0xD1E9aEb4626A96301559806e60068494FB6AC334)               | [Etherscan](https://sepolia.etherscan.io/verifyContract-solc?a=0xD1E9aEb4626A96301559806e60068494FB6AC334&c=v0.8.30%2bcommit.73712a01&lictype=3) |
+| 🟥 Token A (CR7)  | [`0x054CBf388796adefc392813F440E929760A07f2a`](https://sepolia.etherscan.io/address/0x054CBf388796adefc392813F440E929760A07f2a)               | [Etherscan](https://sepolia.etherscan.io/verifyContract-solc?a=0x054CBf388796adefc392813F440E929760A07f2a&c=v0.8.30%2bcommit.73712a01&lictype=3) |
+| 🟦 Token B (M10)  | [`0xE168F31ba1c03Cad6D8B214C49CCe82E1103937B`](https://sepolia.etherscan.io/address/0xE168F31ba1c03Cad6D8B214C49CCe82E1103937B)               | [Etherscan](https://sepolia.etherscan.io/verifyContract-solc?a=0xE168F31ba1c03Cad6D8B214C49CCe82E1103937B&c=v0.8.30%2bcommit.73712a01&lictype=3) |
 
-## ✅ Testing & Verification Checklist
-
-- [x] Proper pool initialization with permission checks.
-- [x] Deadline expiration checks in time-sensitive functions.
-- [x] Proportional liquidity enforcement during deposits.
-- [x] Correct swap behavior and slippage validation.
-- [x] Robust `getAmountOut()` and `getPrice()` calculations.
-- [x] Event emission for all critical actions.
+🔗 GitHub: [https://github.com/pgianferro/ethkip_simpleswap](https://github.com/pgianferro/ethkip_simpleswap)
 
 ---
 
-## 📄 License
+## 🧪 Guía de Uso
 
-This project is licensed under the MIT License. Feel free to use, modify, and distribute.
+1. **Inicializar Pool:** Solo el primer `addLiquidity()` inicia el pool. Requiere `approve()` previo en ambos tokens.  
+2. **Agregar Liquidez:** Luego de inicializar, cualquier usuario puede agregar liquidez manteniendo proporciones.  
+3. **Intercambiar Tokens:** `swapExactTokensForTokens(...)` permite intercambios respetando slippage.  
+4. **Consultar Precio:** Usar `getPrice(tokenA, tokenB)` para obtener el tipo de cambio actual.  
+5. **Retirar Liquidez:** `removeLiquidity(...)` quema tokens LP y devuelve los tokens aportados.  
 
 ---
+
+## ✅ Checklist de Testing y Verificación
+
+- [x] Validación de la inicialización del pool.  
+- [x] Verificación de `deadline` en funciones sensibles al tiempo.  
+- [x] Mantenimiento proporcional en `addLiquidity`.  
+- [x] Comportamiento correcto en swaps y validación de slippage.  
+- [x] Cálculos robustos en `getAmountOut()` y `getPrice()`.  
+- [x] Refactorización completa con buenas prácticas (`require` claros, uso eficiente de variables locales).  
+- [x] Verificación del contrato en Etherscan.  
+- [x] Verificación manual usando el verificador de la cátedra (posición #65).  
+- [x] Se utilizaron valores mínimos (`amountA`, `amountB`, `amountIn = 1`) para reducir el consumo de gas.  
+
+---
+
+## 📄 Licencia
+
+MIT License.
